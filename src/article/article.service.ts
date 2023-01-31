@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { Article } from "./article.entity";
 import { CreateArticleDto } from "./dto/create-article.dto";
 import { RemoveArticleDto } from "./dto/remove-article.dto";
+import { UpdateArticleDto } from "./dto/update-article.dto";
 
 @Injectable()
 export class ArticleService {
@@ -30,6 +31,25 @@ export class ArticleService {
     if (articles.length === 0) return HttpStatus.BAD_REQUEST;
 
     await this.articleRepository.remove(articles);
+
+    return HttpStatus.OK;
+  }
+
+  async update(updateArticleDto: UpdateArticleDto): Promise<HttpStatus> {
+    const articles = await this.articleRepository.find({
+      where: {
+        id: updateArticleDto.id,
+      },
+    });
+
+    if (articles.length === 0) return HttpStatus.BAD_REQUEST;
+
+    const article = articles[0];
+
+    article.text = updateArticleDto.text;
+    article.subject = updateArticleDto.subject;
+
+    await this.articleRepository.save([article]);
 
     return HttpStatus.OK;
   }

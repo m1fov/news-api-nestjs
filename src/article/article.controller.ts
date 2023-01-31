@@ -1,15 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  HttpStatus,
-  Post,
-  Res,
-} from "@nestjs/common";
+import { Body, Controller, HttpStatus, Post, Put, Res } from "@nestjs/common";
 import { ArticleService } from "./article.service";
 import { CreateArticleDto } from "./dto/create-article.dto";
 import { RemoveArticleDto } from "./dto/remove-article.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { UpdateArticleDto } from "./dto/update-article.dto";
 
 @ApiTags("Article")
 @Controller({
@@ -30,8 +24,8 @@ export class ArticleController {
     res.status(HttpStatus.OK).send();
   }
 
-  @Delete("remove")
-  @ApiOperation({ summary: "Deleting a news article." })
+  @Post("remove")
+  @ApiOperation({ summary: "Delete a news article." })
   @ApiResponse({
     status: 200,
     description: "The record has been successfully removed.",
@@ -42,6 +36,22 @@ export class ArticleController {
   })
   async remove(@Res() res, @Body() removeArticleDto: RemoveArticleDto) {
     const responseCode = await this.articleService.remove(removeArticleDto);
+    res.status(responseCode).send();
+  }
+
+  @Put("update")
+  @ApiOperation({ summary: "Update a news article." })
+  @ApiResponse({
+    status: 200,
+    description: "The record has been successfully updated.",
+  })
+  @ApiResponse({
+    status: 400,
+    description: "An entry under this Id was not found.",
+  })
+  @ApiOperation({ summary: "Update a news article." })
+  async update(@Res() res, @Body() updateArticleDto: UpdateArticleDto) {
+    const responseCode = await this.articleService.update(updateArticleDto);
     res.status(responseCode).send();
   }
 }

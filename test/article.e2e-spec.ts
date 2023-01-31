@@ -27,7 +27,18 @@ describe("ArticleController (e2e)", () => {
       .expect(200);
   });
 
-  it("DELETE /remove", () => {
+  it("PUT /update", () => {
+    return request(app.getHttpServer())
+      .delete("/article/update")
+      .send({
+        id: 1,
+        subject: "Edited test subject",
+        text: "Edited test text",
+      })
+      .expect(200);
+  });
+
+  it("POST /remove", () => {
     return request(app.getHttpServer())
       .delete("/article/remove")
       .send({
