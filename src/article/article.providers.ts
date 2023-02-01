@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Article } from "./article.entity";
+import { ArticleEntity } from "./article.entity";
 import {
   articleRepositoryProvider,
   dataSourceProvider,
@@ -8,7 +8,8 @@ import {
 export const articleProviders = [
   {
     provide: articleRepositoryProvider,
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(Article),
+    useFactory: (dataSource: DataSource) =>
+      dataSource.getRepository(ArticleEntity),
     inject: [dataSourceProvider],
   },
 ];
